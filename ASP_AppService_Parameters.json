@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspName": {
+            "value": "BradyASP"
+        },
+        "location": {
+            "value": "Central US"
+        },
+        "aspNumberOfWorkers": {
+            "value": "1"
+        },
+        "aspSKU": {
+            "value": "Free"
+        },
+        "aspSKUCode": {
+            "value": "F1"
+        },
+        "aspWorkerSize": {
+            "value": "0"
+        },
+        "aspWorkerSizeId": {
+            "value": "0"
+        },
+		"subscriptionId": {
+            "value": "2a1d8a74-a3f0-42fb-a5d1-56bb317cc773"
+        },
+        "appServiceName": {
+            "value": "Brady-WebApp"
+        },        
+        "hostingPlanName": {
+            "value": "BradyASP"
+        },
+        "serverFarmResourceGroup": {
+            "value": "bradyresourcegroup"
+        },
+        "alwaysOn": {
+            "value": false
+        },
+        "currentStack": {
+            "value": "dotnetcore"
+        },        
+        "errorLink": {
+            "value": "https://Brady-WebApp.scm.azurewebsites.net/detectors?type=tools&name=eventviewer"
+        }
+    }
+}

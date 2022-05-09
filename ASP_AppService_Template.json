@@ -1,0 +1,94 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "aspName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "aspSKU": {
+            "type": "string"
+        },
+        "aspSKUCode": {
+            "type": "string"
+        },
+        "aspWorkerSize": {
+            "type": "string"
+        },
+        "aspWorkerSizeId": {
+            "type": "string"
+        },
+        "aspNumberOfWorkers": {
+            "type": "string"
+        },
+		"appServiceName": {
+            "type": "string"
+        },
+		"serverFarmResourceGroup": {
+            "type": "string"
+        },
+        "alwaysOn": {
+            "type": "bool"
+        },
+        "currentStack": {
+            "type": "string"
+        },        
+        "errorLink": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('aspName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "kind": "",            
+            "properties": {
+                "name": "[parameters('aspName')]",
+                "workerSize": "[parameters('aspWorkerSize')]",
+                "workerSizeId": "[parameters('aspWorkerSizeId')]",
+                "numberOfWorkers": "[parameters('aspNumberOfWorkers')]",
+                "reserved": false,
+                "zoneRedundant": true
+            },
+            "sku": {
+                "Tier": "[parameters('aspSKU')]",
+                "Name": "[parameters('aspSKUCode')]"
+            }
+        },
+		{
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('appServiceName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[parameters('location')]",
+            "tags": {},
+            "dependsOn": [
+				"[resourceId('Microsoft.Web/serverfarms', concat(parameters('aspName')))]"
+			],
+            "properties": {
+                "name": "[parameters('appServiceName')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "ANCM_ADDITIONAL_ERROR_PAGE_LINK",
+                            "value": "[parameters('errorLink')]"
+                        }
+                    ],
+                    "metadata": [
+                        {
+                            "name": "CURRENT_STACK",
+                            "value": "[parameters('currentStack')]"
+                        }
+                    ],                    
+                    "alwaysOn": "[parameters('alwaysOn')]"
+                },
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('aspName'))]",
+                "clientAffinityEnabled": true,
+                "virtualNetworkSubnetId": null
+            }
+        }
+    ]
+}
